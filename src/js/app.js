@@ -3,13 +3,21 @@ App = {
   contracts: {},
   account: '0x04d6cE158c414402AAC8135563FB3FCa3688822D',
   hasVoted: false,
-
+  
   init: function() {
     return App.initWeb3();
+    
   },
-
+  
   initWeb3: function() {
     // TODO: refactor conditional
+    
+    
+    
+    window.ethereum.enable();
+    web3.eth.defaultAccount = '0x04d6cE158c414402AAC8135563FB3FCa3688822D';
+    
+    
     if (typeof web3 !== 'undefined') {
       // If a web3 instance is already provided by Meta Mask.
       App.web3Provider = web3.currentProvider;
@@ -21,7 +29,7 @@ App = {
     }
     return App.initContract();
   },
-
+  
   initContract: function() {
     $.getJSON("Election.json", function(election) {
       // Instantiate a new truffle contract from the artifact
@@ -63,7 +71,7 @@ App = {
     // Load account data
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
-        $("#accountAddress").html("Your Account: " + App.account);
+        $("#accountAddress").html("Your Account: " + '0x04d6cE158c414402AAC8135563FB3FCa3688822D');
       }
     });
 
@@ -93,7 +101,7 @@ App = {
           candidatesSelect.append(candidateOption);
         });
       }
-      return electionInstance.voters(App.account);
+      return electionInstance.voters('0x04d6cE158c414402AAC8135563FB3FCa3688822D');
     }).then(function(hasVoted) {
       // Do not allow a user to vote
       if(hasVoted) {
@@ -109,7 +117,7 @@ App = {
   castVote: function() {
     var candidateId = $('#candidatesSelect').val();
     App.contracts.Election.deployed().then(function(instance) {
-      return instance.vote(candidateId, { from: App.account });
+      return instance.vote(candidateId, { from: '0x04d6cE158c414402AAC8135563FB3FCa3688822D' });
     }).then(function(result) {
       // Wait for votes to update
       $("#content").hide();
