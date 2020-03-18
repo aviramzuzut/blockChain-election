@@ -12,6 +12,10 @@
   },
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "express": "~4.15.2",
+    "express-unless": "^0.5.0"
+  },
   "devDependencies": {
     "lite-server": "^2.3.0"
   }

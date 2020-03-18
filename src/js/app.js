@@ -1,7 +1,13 @@
+var express = require('express');
+var app = express();
+app.use(express.static(path.join(__dirname, 'src')));
+
+app.use('/', index);
+
 App = {
   web3Provider: null,
   contracts: {},
-  account: '0x04d6cE158c414402AAC8135563FB3FCa3688822D',
+  account: '0xE6BC5a72B8148e22AB8D3533BbFD1274695eDC79',
   hasVoted: false,
 
   init: function() {
@@ -107,9 +113,24 @@ App = {
   },
 
   castVote: function() {
+
+    // (async () => {
+    //   const accounts = await web3.eth.getAccounts();
+    //   console.log(accounts);
+    
+    //   const balance = await web3.eth.getBalance(accounts[0]);
+    //   console.log("balance", web3.utils.fromWei(balance, "ether"));
+    // })();
+
+    // var account0;
+    // web3.eth.getAccounts().then(function(result){
+    //   account0 = result[0];
+    // })
+
+
     var candidateId = $('#candidatesSelect').val();
     App.contracts.Election.deployed().then(function(instance) {
-      return instance.vote(candidateId, { from: App.account });
+      return instance.vote(candidateId, { from: "0xd444d224DB53921E705B60c962a5d826576Ff9e5" });
     }).then(function(result) {
       // Wait for votes to update
       $("#content").hide();
