@@ -8,6 +8,11 @@ body {
   margin-top: 50px;
 }
 
+#timer {
+  margin-left: 550px;
+  font-size: 20px;
+}
+
 #snapshots {
   display: none;
   width: 372px;

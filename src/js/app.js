@@ -119,12 +119,17 @@ App = {
     App.contracts.Election.deployed().then(function(instance) {
       return instance.vote(candidateId, { from: '0x04d6cE158c414402AAC8135563FB3FCa3688822D' });
     }).then(function(result) {
+      hasVoted = true;
       // Wait for votes to update
       $("#content").hide();
       $("#loader").show();
     }).catch(function(err) {
       console.error(err);
     });
+  },
+
+  showResults: function() {
+    document.getElementById("mainBody").innerHTML = "<table class=\"table\"><thead><tr><th scope=\"col\">#</th><th scope=\"col\">Name</th><th scope=\"col\">Votes</th></tr></thead><tbody id=\"candidatesResults\"></tbody></table>";
   }
 };
 
