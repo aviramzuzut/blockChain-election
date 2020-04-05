@@ -29,9 +29,10 @@ contract Election {
         addCandidate("Bennet");
     }
 
-    function addCandidate (string memory _name) private {
+    function addCandidate (string memory _name) public returns (bool) {
         candidatesCount++;
         candidates[candidatesCount] = Candidate(candidatesCount, _name,0);
+        return true;
     }
 
     function vote (uint _candidateId) public {

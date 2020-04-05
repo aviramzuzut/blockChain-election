@@ -129,8 +129,56 @@ App = {
   },
 
   showResults: function() {
+
+    App.contracts.Election.deployed().then(function(instance) {
+      electionInstance = instance;
+      return electionInstance.candidatesCount();
+    }).then(function(candidatesCount) {
+      var candidatesResults = $("#candidatesResults");
+      candidatesResults.empty();
+
+      var candidatesSelect = $('#candidatesSelect');
+      candidatesSelect.empty();
+
+      for (var i = 1; i <= candidatesCount; i++) {
+        electionInstance.candidates(i).then(function(candidate) {
+          var id = candidate[0];
+          var name = candidate[1];
+          var voteCount = candidate[2];
+
+          // Render candidate Result
+          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
+          candidatesResults.append(candidateTemplate);
+
+        });
+      }
+      return electionInstance.voters('0x04d6cE158c414402AAC8135563FB3FCa3688822D');
+    }).then(function(hasVoted) {
+      // Do not allow a user to vote
+      if(hasVoted) {
+        $('form').hide();
+      }
+      loader.hide();
+      content.show();
+    }).catch(function(error) {
+      console.warn(error);
+    });
+
     document.getElementById("mainBody").innerHTML = "<table class=\"table\"><thead><tr><th scope=\"col\">#</th><th scope=\"col\">Name</th><th scope=\"col\">Votes</th></tr></thead><tbody id=\"candidatesResults\"></tbody></table>";
-  }
+
+  },
+
+  addCandidate: function(candidate_name) {
+    App.contracts.Election.deployed().then(function(instance) {
+      return instance.addCandidate(candidate_name.value);
+    }).then(function(isAdded){
+      if(isAdded){
+        render();
+      }
+    }).catch(function(err) {
+      console.error(err);
+    });
+  },
 };
 
 $(function() {

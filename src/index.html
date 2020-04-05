@@ -17,36 +17,22 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">Israel elections DAPP</a>
-
-      <div class="collapse navbar-collapse">
-          <ul class="navbar-nav">
-              <li class="nav-item" id="register" style="margin: 10px;">
-                  <a class="nav-link" href="/register">Register</a>
-              </li>
-              <li class="nav-item" id="vote"  style="margin: 10px;">
-                  <a class="nav-link" href="/src/js/">Vote</a>
-              </li>
-              <li class="nav-item" id="results"  style="margin: 10px;">
-                  <a class="nav-link" href="/results">Results</a>
-              </li>
-              <li class="nav-item" id="admin"  style="margin: 10px;">
-                  <a class="nav-link" href="/admin">Admin Panel</a>
-              </li>
-
-          </ul>
-      </div>
-  </nav>
-
+    <!-- <script src="http://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+      $(function(){
+      $("#includedContent").load("header.html"); 
+    });
+    </script> -->
   </head>
+  <!-- <div id="includedContent"></div> -->
+
   <body id="mainBody">
 
     <p id="timer"></p>
 
     <script>
     // Set the date we're counting down to
-    var countDownDate = new Date("Jan 5, 2021 15:37:25").getTime();
+    var countDownDate = new Date("Apr 4, 2021 15:17:25").getTime();
     
     // Update the count down every 1 second
     var x = setInterval(function() {
@@ -64,9 +50,12 @@
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
     
       // Display the result in the element with id="timer"
-      document.getElementById("timer").innerHTML = days + "d " + hours + "h "
+      if(document.getElementById("timer")!= null){
+        document.getElementById("timer").innerHTML = days + "d " + hours + "h "
       + minutes + "m " + seconds + "s ";
-      document.getElementById("timer").style="margin-left: 550px; font-size: 20px;";
+      document.getElementById("timer").style="margin-left: 550px; font-size: 20px;";  
+    }
+      
       // If the count down is finished, write some text
       if (distance < 0) {
         clearInterval(x);
@@ -86,6 +75,14 @@
           <div id="loader">
             <p class="text-center">Loading...</p>
           </div>
+          <form onSubmit="App.addCandidate(candidate_name)">
+          <div>
+            <div>
+              <input type="text" style="margin-bottom: 10px;" class="form-control" id="candidate_name" name="candidate_name" placeholder="Candidate name">
+            </div>
+            <button type="submit" class="btn btn-primary" >Add</button>
+          </div>
+        </form>
           <div id="content" style="display: none;">
 
             <hr/>
