@@ -1,7 +1,7 @@
 App = {
   web3Provider: null,
   contracts: {},
-  account: '0x04d6cE158c414402AAC8135563FB3FCa3688822D',
+  account: '0x0',
   hasVoted: false,
   
   init: function() {
@@ -15,7 +15,7 @@ App = {
     
     
     window.ethereum.enable();
-    web3.eth.defaultAccount = '0x04d6cE158c414402AAC8135563FB3FCa3688822D';
+    // web3.eth.defaultAccount = App.account;
     
     
     if (typeof web3 !== 'undefined') {
@@ -71,9 +71,12 @@ App = {
     // Load account data
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
-        $("#accountAddress").html("Your Account: " + '0x04d6cE158c414402AAC8135563FB3FCa3688822D');
+        App.account = account;
+        $("#accountAddress").html("Your Account: " + App.account);
       }
     });
+
+    // var appVotersBook = App.getAddressBook();
 
     // Load contract data
     App.contracts.Election.deployed().then(function(instance) {
@@ -101,11 +104,13 @@ App = {
           candidatesSelect.append(candidateOption);
         });
       }
-      return electionInstance.voters('0x04d6cE158c414402AAC8135563FB3FCa3688822D');
+      return electionInstance.voters(App.account);
     }).then(function(hasVoted) {
       // Do not allow a user to vote
       if(hasVoted) {
         $('form').hide();
+        document.getElementById("voterChoice").style="margin-left: 550px; font-size: 20px;";
+        document.getElementById("voterChoice").innerHTML = "<p> You already voted!!!</p>";
       }
       loader.hide();
       content.show();
@@ -117,7 +122,7 @@ App = {
   castVote: function() {
     var candidateId = $('#candidatesSelect').val();
     App.contracts.Election.deployed().then(function(instance) {
-      return instance.vote(candidateId, { from: '0x04d6cE158c414402AAC8135563FB3FCa3688822D' });
+      return instance.vote(candidateId, { from: App.account });
     }).then(function(result) {
       hasVoted = true;
       // Wait for votes to update
@@ -152,11 +157,12 @@ App = {
 
         });
       }
-      return electionInstance.voters('0x04d6cE158c414402AAC8135563FB3FCa3688822D');
+      return electionInstance.voters(App.account);
     }).then(function(hasVoted) {
       // Do not allow a user to vote
       if(hasVoted) {
         $('form').hide();
+        // document.getElementById("voterChoice").innerHTML = "<p> You already voted!!!</p>";
       }
       loader.hide();
       content.show();
@@ -168,12 +174,20 @@ App = {
 
   },
 
+  getAddressBook: function() {
+    App.contracts.Election.deployed().then(function(instance) {
+      return instance.voters();
+    }).then(function(voters){
+      var votersBook = voters;
+    })
+  },
+
   addCandidate: function(candidate_name) {
     App.contracts.Election.deployed().then(function(instance) {
       return instance.addCandidate(candidate_name.value);
     }).then(function(isAdded){
       if(isAdded){
-        render();
+        // App.render();
       }
     }).catch(function(err) {
       console.error(err);
