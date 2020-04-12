@@ -64,7 +64,7 @@ App = {
     var electionInstance;
     var loader = $("#loader");
     var content = $("#content");
-
+    
     loader.show();
     content.hide();
 
@@ -114,6 +114,7 @@ App = {
       }
       loader.hide();
       content.show();
+      $("#add-candidate").hide();
     }).catch(function(error) {
       console.warn(error);
     });
@@ -164,8 +165,8 @@ App = {
         $('form').hide();
         // document.getElementById("voterChoice").innerHTML = "<p> You already voted!!!</p>";
       }
-      loader.hide();
-      content.show();
+      $("#content").show();
+      $("#loader").hide();
     }).catch(function(error) {
       console.warn(error);
     });
@@ -180,6 +181,17 @@ App = {
     }).then(function(voters){
       var votersBook = voters;
     })
+  },
+
+  loginAsAdmin: function(){
+    var adminAddress = "0x04d6cE158c414402AAC8135563FB3FCa3688822D";
+    var address = App.account;
+    if(address == adminAddress.toLowerCase()){
+      $("#add-candidate").show();
+    }
+    else{
+      alert('You are not authorized as admin')
+    }
   },
 
   addCandidate: function(candidate_name) {
