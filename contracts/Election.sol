@@ -66,7 +66,8 @@ contract Election {
         // require(voters[msg.sender].voterAddress != address(0));
 
         // require that they voted in allowed time
-        // require(Date(countDownDate) <= Date().getTime());
+
+        require(((2021 * 365 * 1 days) + (120 * 1 days) + (15 * 1 hours) ) >= now );
 
         // require a valid candidate
         require(_candidateId > 0 && _candidateId <= candidatesCount);
@@ -89,5 +90,6 @@ contract Election {
     function addVoter(address addr) private {
         // voters[addr].hasVoted = false;
         voters[addr] = false;
+        // voters[addr] = Voter(addr,false);
     }
 }
