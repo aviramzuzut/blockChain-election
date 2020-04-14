@@ -41,6 +41,40 @@ App = {
 
       return App.render();
     });
+
+    $.getJSON("ElectionToken.json", function(erc20) {
+      // Instantiate a new truffle contract from the artifact
+      App.contracts.ERC20 = TruffleContract(erc20);
+      // Connect provider to interact with contract
+      App.contracts.ERC20.setProvider(App.web3Provider);
+
+      App.listenForERC20Events();
+
+      // return App.render();
+    });
+  },
+
+  listenForERC20Events: function() {
+    App.contracts.ERC20.deployed().then(function(instance) {
+      // Restart Chrome if you are unable to receive this event
+      // This is a known issue with Metamask
+      // https://github.com/MetaMask/metamask-extension/issues/2393
+      instance.Transfer({}, {
+        fromBlock: 0,
+        toBlock: 'latest'
+      }).watch(function(error, event) {
+        console.log("event triggered", event)
+
+      });
+
+      instance.Approval({}, {
+        fromBlock: 0,
+        toBlock: 'latest'
+      }).watch(function(error, event) {
+        console.log("event triggered", event)
+
+      });
+    });
   },
 
   // Listen for events emitted from the contract
@@ -64,6 +98,7 @@ App = {
     var electionInstance;
     var loader = $("#loader");
     var content = $("#content");
+    $("#addressesBook").hide();
     
     loader.show();
     content.hide();
@@ -75,8 +110,6 @@ App = {
         $("#accountAddress").html("Your Account: " + App.account);
       }
     });
-
-    // var appVotersBook = App.getAddressBook();
 
     // Load contract data
     App.contracts.Election.deployed().then(function(instance) {
@@ -104,6 +137,7 @@ App = {
           candidatesSelect.append(candidateOption);
         });
       }
+
       return electionInstance.voters(App.account);
     }).then(function(hasVoted) {
       // Do not allow a user to vote
@@ -129,6 +163,21 @@ App = {
       // Wait for votes to update
       $("#content").hide();
       $("#loader").show();
+
+      
+      var bankAddress = 0x04d6cE158c414402AAC8135563FB3FCa3688822D;
+      App.contracts.ERC20.deployed().then(function(erc20Instance){
+        return erc20Instance.transfer(App.account,21000);
+      }).then(function (res){
+        console.log(res);
+      }).catch(function(err) {
+        console.error(err);
+      });
+      // App.contracts.Election.deployed().then(function(instance) {
+      //   return instance.pay(100, { from: App.account });
+      // }).then(function(result) {
+      //   console.log(result);
+      // })
     }).catch(function(err) {
       console.error(err);
     });
@@ -176,11 +225,40 @@ App = {
   },
 
   getAddressBook: function() {
+    var adminAddress = "0x04d6cE158c414402AAC8135563FB3FCa3688822D";
+    var address = App.account;
+    if(address == adminAddress.toLowerCase()){
     App.contracts.Election.deployed().then(function(instance) {
-      return instance.voters();
-    }).then(function(voters){
-      var votersBook = voters;
-    })
+      var addresses = [];
+      var count = 1;
+      var addressesBook = $("#addressesBook");
+      addressesBook.empty();
+
+        for (var i = 0; i <= 10 ; i++) {
+          instance.addressLUT(i).then(voter =>{
+          addresses.push(voter);
+          var id = count;
+          count++;
+          var address = voter;
+          var addressesBookTemplate = "<tr><th>" + id + "</th><td>" + address + "</td></tr>"
+          addressesBook.append(addressesBookTemplate);
+         })
+        }
+        // document.getElementById("addressesBook").style = "margin-left: 550px; padding: 10px;";
+        document.getElementById("addressesBook").innerHTML = "<table class=\"table\"><thead><tr><th scope=\"col\">#</th><th scope=\"col\">Address</th></tr></thead><tbody id=\"addressesBook\"></tbody></table>";
+
+        $("#addressesBook").show();
+
+      // return instance.getAddressBook().then(res =>{
+      //   if(res){
+      //     var voters = res;
+      //   }
+      // });
+    });
+  }
+  else{
+    alert('You are not authorized as admin')
+  }
   },
 
   loginAsAdmin: function(){

@@ -179,7 +179,7 @@ var contract = (function(module) {
                     return reject(new Error("Transaction " + tx + " wasn't processed in " + (timeout / 1000) + " seconds!"));
                   }
 
-                  setTimeout(make_attempt, 1000);
+                  setTimeout(make_attempt, 6000);
                 });
               };
 
@@ -7342,7 +7342,7 @@ function runTimeout(fun) {
     // if setTimeout wasn't available but was latter defined
     if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
         cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
+        return setTimeout(fun, 6000);
     }
     try {
         // when when somebody has screwed with setTimeout but no I.E. maddness
