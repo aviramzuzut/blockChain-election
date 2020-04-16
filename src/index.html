@@ -9,6 +9,7 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="stylesheets/style.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -31,8 +32,9 @@
 
     <p id="timer"></p>
         <div>
-        <button type="submit" class="btn btn-primary" style="margin-bottom: 10px; margin-left: 5px;" onclick="App.loginAsAdmin()">login as admin</button>
-        <button type="submit" class="btn btn-primary" style="margin-bottom: 10px; margin-left: 5px;" onclick="App.getAddressBook()">Address book</button>
+        <button type="button" class="btn btn-primary" style="margin-bottom: 10px; margin-left: 5px;" onclick="App.loginAsAdmin()">login as admin</button>
+        <button type="button" class="btn btn-primary" style="margin-bottom: 10px; margin-left: 5px;" onclick="App.getAddressBook()">Address book</button>
+        <button type="button" class="btn btn-primary" style="margin-bottom: 10px; margin-left: 5px;" onclick="App.showQuestionary()">Questionary</button>
         </div>
 
 
@@ -94,6 +96,7 @@
           </div>
       <div id="content" style="display: none;">
             <hr/>
+            <p id="accountAddress" class="text-center"></p>
             <form onSubmit="App.castVote(); return false;">
               <div class="form-group">
                 <label for="candidatesSelect">Select Candidate</label>
@@ -103,14 +106,47 @@
               <button type="submit" class="btn btn-primary">Vote</button>
               <hr />
             </form>
-            <p id="accountAddress" class="text-center"></p>
           </div>
         </div>
       </div>
+      <div id="container_form" class="container">
+        <h2>Registration</h2>
+        <form name="registration">
+          
+          <label for="firstname">First Name</label>
+          <input type="text" name="firstname" id="firstname" placeholder="Aviram"/>
+          
+          <label for="lastname">Last Name</label>
+          <input type="text" name="lastname" id="lastname" placeholder="Zuzut"/>
+          
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" placeholder="aviram@gmail.com"/>
+          
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"/>
+          
+          <button type="button" onclick="App.showQuiz()">Register</button>
+          
+        </form>
+      </div>
+          <div id="quizForm">
+            <div id="quiz"></div>
+            <button type="button" id="submit" class="btn btn-primary" style="margin: 10px;" onclick="App.showQuizResults()">Submit</button>
+            <div id="results">
+              <div id="firstGraph" style="margin:0 auto;"></div>
+              <div id="secondGraph" style="margin:0 auto;"></div>
+              <div id="thirdGraph" style="margin:0 auto;"></div>
+            </div>
+          </div>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
+    <!-- <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script> -->
+    <!-- <script src="./node_modules/jquery-validation/dist/jquery.validate.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+    <script src="js/form-validation.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/web3.min.js"></script>

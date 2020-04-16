@@ -3,6 +3,35 @@ App = {
   contracts: {},
   account: '0x0',
   hasVoted: false,
+  adminAddress: "0x04d6cE158c414402AAC8135563FB3FCa3688822D",
+  myQuestions:[
+    {
+      question: "Who did you choose?",
+      answers: {
+        a: "Bibi",
+        b: "Gantz",
+        c: "Bennet",
+        d: "Other"
+      },
+    },
+    {
+      question: "Are you a right wing or left wing?",
+      answers: {
+        a: "Right",
+        b: "Left",
+        c: "Not sure about that"
+      },
+    },
+    {
+      question: "How do you feel about voting with DAPP election system?",
+      answers: {
+        a: "Great",
+        b: "Good",
+        c: "Bad",
+        d: "Not sure about that"
+      },
+    }
+  ],
   
   init: function() {
     return App.initWeb3();
@@ -99,6 +128,8 @@ App = {
     var loader = $("#loader");
     var content = $("#content");
     $("#addressesBook").hide();
+    $("#container_form").hide();
+    $("#submit").hide();
     
     loader.show();
     content.hide();
@@ -225,7 +256,7 @@ App = {
   },
 
   getAddressBook: function() {
-    var adminAddress = "0x04d6cE158c414402AAC8135563FB3FCa3688822D";
+    var adminAddress = App.adminAddress;
     var address = App.account;
     if(address == adminAddress.toLowerCase()){
     App.contracts.Election.deployed().then(function(instance) {
@@ -262,7 +293,7 @@ App = {
   },
 
   loginAsAdmin: function(){
-    var adminAddress = "0x04d6cE158c414402AAC8135563FB3FCa3688822D";
+    var adminAddress = App.adminAddress;
     var address = App.account;
     if(address == adminAddress.toLowerCase()){
       $("#add-candidate").show();
@@ -272,20 +303,199 @@ App = {
     }
   },
 
-  stringToHash: function(string) { 
-                  
-    var hash = 0; 
+  showQuestionary: function(){
+    $("#container_form").show();
+  },
+
+  buildQuiz: function(quizContainer){
+      // variable to store the HTML output
+      const output = [];
+    
+      // for each question...
+      App.myQuestions.forEach(
+        (currentQuestion, questionNumber) => {
+    
+          // variable to store the list of possible answers
+          const answers = [];
+    
+          // and for each available answer...
+          for(letter in currentQuestion.answers){
+    
+            // ...add an HTML radio button
+            answers.push(
+              `<label>
+                <input type="radio" name="question${questionNumber}" value="${letter}">
+                ${letter} :
+                ${currentQuestion.answers[letter]}
+              </label>`
+            );
+          }
+    
+          // add this question and its answers to the output
+          output.push(
+            `<div class="question"><b><u> ${currentQuestion.question} </u></b></div>
+            <div class="answers"> ${answers.join('')} </div>`
+          );
+        }
+      );
+    
+      // finally combine our output list into one string of HTML and put it on the page
+      quizContainer.innerHTML = output.join('');
+
+  },
+
+  showQuiz: function(){
+
+    const quizContainer = document.getElementById('quiz');
+    const resultsContainer = document.getElementById('results');
+    const submitButton = document.getElementById('submit');
+    App.buildQuiz(quizContainer);
+    // App.showQuizResults(quizContainer, resultsContainer)
+
+
+    // Event listeners
+    // submitButton.addEventListener('click', showResults);
+
+    $("#submit").show();
+  },
+
+  showQuizResults: function(){
+    var count1 = 0;
+    var count2 = 0;
+    var count3 = 0;
+    var count4 = 0;
+    var count5 = 0;
+    var count6 = 0;
+    var count7 = 0;
+    var count8 = 0;
+    var count9 = 0;
+    var count10 = 0;
+    var count11 = 0;
+
+    const quizContainer = document.getElementById('quiz');
+    const resultsContainer = document.getElementById('results');
+    // gather answer containers from our quiz
+    const answerContainers = quizContainer.querySelectorAll('.answers');
+
+    // keep track of user's answers
+    let numCorrect = 0;
+
+    // for each question...
+    App.myQuestions.forEach( (currentQuestion, questionNumber) => {
+
+    // find selected answer
+    const answerContainer = answerContainers[questionNumber];
+    const selector = `input[name=question${questionNumber}]:checked`;
+    const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+    
+    if (currentQuestion.question == "Who did you choose?") {
+      switch (userAnswer) {
+        case 'a':
+          count1++;
+          break;
+        case 'b':
+          count2++;
+          break;
+        case 'c':
+          count3++;
+          break;
+        case 'd':
+          count4++;
+          break;
       
-    if (string.length == 0) return hash; 
+        default:
+          break;
+      }  
+    }
+
+    if (currentQuestion.question == "Are you a right wing or left wing?") {
+      switch (userAnswer) {
+        case 'a':
+          count5++;
+          break;
+        case 'b':
+          count6++;
+          break;
+        case 'c':
+          count7++;
+          break;
       
-    for (i = 0; i < string.length; i++) { 
-        char = string.charCodeAt(i); 
-        hash = ((hash << 5) - hash) + char; 
-        hash = hash & hash; 
-    } 
+        default:
+          break;
+      }  
+    }
+
+    if (currentQuestion.question == "How do you feel about voting with DAPP election system?") {
+      switch (userAnswer) {
+        case 'a':
+          count8++;
+          break;
+        case 'b':
+          count9++;
+          break;
+        case 'c':
+          count10++;
+          break;
+        case 'd':
+          count11++;
+          break;
       
-    return hash; 
-}, 
+        default:
+          break;
+      }  
+    }
+    
+
+  });
+
+
+  JSC.Chart('firstGraph', {
+    type: 'horizontal column',
+    series: [
+       {
+          name:'Who did you choose?',
+          points: [
+             {x: 'Bibi', y: count1},
+             {x: 'Gantz', y: count2},
+             {x: 'Bennet', y: count3},
+             {x: 'Other', y: count4},
+          ]
+       }
+    ]
+ });
+
+ JSC.Chart('secondGraph', {
+  type: 'horizontal column',
+  series: [
+    {
+       name:'Are you a right wing or left wing?',
+       points: [
+          {x: 'Right', y: count5},
+          {x: 'Left', y: count6},
+          {x: 'Not sure about that', y: count7},
+       ]
+    }
+ ]
+});
+
+JSC.Chart('thirdGraph', {
+  type: 'horizontal column',
+  series: [
+    {
+       name:'How do you feel about voting with DAPP election system?',
+       points: [
+          {x: 'Great', y: count8},
+          {x: 'Good', y: count9},
+          {x: 'Bad', y: count10},
+          {x: 'Not sure about that', y: count11},
+       ]
+    }
+ ]
+});
+
+  // show number of correct answers out of total
+  // resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+  },
 
   addCandidate: function(candidate_name) {
     App.contracts.Election.deployed().then(function(instance) {
