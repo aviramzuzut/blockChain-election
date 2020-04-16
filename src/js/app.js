@@ -143,7 +143,7 @@ App = {
       // Do not allow a user to vote
       if(hasVoted) {
         $('form').hide();
-        document.getElementById("voterChoice").style="margin-left: 550px; font-size: 20px;";
+        document.getElementById("voterChoice").style="font-size: 20px;";
         document.getElementById("voterChoice").innerHTML = "<p> You already voted!!!</p>";
       }
       loader.hide();
@@ -220,7 +220,7 @@ App = {
       console.warn(error);
     });
 
-    document.getElementById("mainBody").innerHTML = "<table class=\"table\"><thead><tr><th scope=\"col\">#</th><th scope=\"col\">Name</th><th scope=\"col\">Votes</th></tr></thead><tbody id=\"candidatesResults\"></tbody></table>";
+    document.getElementById("mainBody").innerHTML = "<h1>Final results:</h1><br/><table class=\"table\"><thead><tr><th scope=\"col\">#</th><th scope=\"col\">Name</th><th scope=\"col\">Votes</th></tr></thead><tbody id=\"candidatesResults\"></tbody></table>";
 
   },
 
