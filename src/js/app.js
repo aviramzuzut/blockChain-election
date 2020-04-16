@@ -4,6 +4,7 @@ App = {
   account: '0x0',
   hasVoted: false,
   adminAddress: "0x04d6cE158c414402AAC8135563FB3FCa3688822D",
+  questionaryCounters:[0,0,0,0,0,0,0,0,0,0,0],
   myQuestions:[
     {
       question: "Who did you choose?",
@@ -139,6 +140,15 @@ App = {
       if (err === null) {
         App.account = account;
         $("#accountAddress").html("Your Account: " + App.account);
+      }
+    });
+
+
+    App.contracts.Election.deployed().then(function(instance) {
+      for (var i = 0; i <= 10 ; i++) {
+        instance.questionaryCounters(i).then(count =>{
+          App.questionaryCounters[i] = count;
+       })
       }
     });
 
@@ -360,17 +370,6 @@ App = {
   },
 
   showQuizResults: function(){
-    var count1 = 0;
-    var count2 = 0;
-    var count3 = 0;
-    var count4 = 0;
-    var count5 = 0;
-    var count6 = 0;
-    var count7 = 0;
-    var count8 = 0;
-    var count9 = 0;
-    var count10 = 0;
-    var count11 = 0;
 
     const quizContainer = document.getElementById('quiz');
     const resultsContainer = document.getElementById('results');
@@ -391,16 +390,16 @@ App = {
     if (currentQuestion.question == "Who did you choose?") {
       switch (userAnswer) {
         case 'a':
-          count1++;
+          App.questionaryCounters[0]++;
           break;
         case 'b':
-          count2++;
+          App.questionaryCounters[1]++;
           break;
         case 'c':
-          count3++;
+          App.questionaryCounters[2]++;
           break;
         case 'd':
-          count4++;
+          App.questionaryCounters[3]++;
           break;
       
         default:
@@ -411,13 +410,13 @@ App = {
     if (currentQuestion.question == "Are you a right wing or left wing?") {
       switch (userAnswer) {
         case 'a':
-          count5++;
+          App.questionaryCounters[4]++;
           break;
         case 'b':
-          count6++;
+          App.questionaryCounters[5]++;
           break;
         case 'c':
-          count7++;
+          App.questionaryCounters[6]++;
           break;
       
         default:
@@ -428,16 +427,16 @@ App = {
     if (currentQuestion.question == "How do you feel about voting with DAPP election system?") {
       switch (userAnswer) {
         case 'a':
-          count8++;
+          App.questionaryCounters[7]++;
           break;
         case 'b':
-          count9++;
+          App.questionaryCounters[8]++;
           break;
         case 'c':
-          count10++;
+          App.questionaryCounters[9]++;
           break;
         case 'd':
-          count11++;
+          App.questionaryCounters[10]++;
           break;
       
         default:
@@ -448,6 +447,11 @@ App = {
 
   });
 
+  App.contracts.Election.deployed().then(function(instance) {
+    instance.storeCounts(App.questionaryCounters);
+  });
+  
+
 
   JSC.Chart('firstGraph', {
     type: 'horizontal column',
@@ -455,10 +459,10 @@ App = {
        {
           name:'Who did you choose?',
           points: [
-             {x: 'Bibi', y: count1},
-             {x: 'Gantz', y: count2},
-             {x: 'Bennet', y: count3},
-             {x: 'Other', y: count4},
+             {x: 'Bibi', y: App.questionaryCounters[0]},
+             {x: 'Gantz', y: App.questionaryCounters[1]},
+             {x: 'Bennet', y: App.questionaryCounters[2]},
+             {x: 'Other', y: App.questionaryCounters[3]},
           ]
        }
     ]
@@ -470,9 +474,9 @@ App = {
     {
        name:'Are you a right wing or left wing?',
        points: [
-          {x: 'Right', y: count5},
-          {x: 'Left', y: count6},
-          {x: 'Not sure about that', y: count7},
+          {x: 'Right', y: App.questionaryCounters[4]},
+          {x: 'Left', y: App.questionaryCounters[5]},
+          {x: 'Not sure about that', y: App.questionaryCounters[6]},
        ]
     }
  ]
@@ -484,10 +488,10 @@ JSC.Chart('thirdGraph', {
     {
        name:'How do you feel about voting with DAPP election system?',
        points: [
-          {x: 'Great', y: count8},
-          {x: 'Good', y: count9},
-          {x: 'Bad', y: count10},
-          {x: 'Not sure about that', y: count11},
+          {x: 'Great', y: App.questionaryCounters[7]},
+          {x: 'Good', y: App.questionaryCounters[8]},
+          {x: 'Bad', y: App.questionaryCounters[9]},
+          {x: 'Not sure about that', y: App.questionaryCounters[10]},
        ]
     }
  ]
