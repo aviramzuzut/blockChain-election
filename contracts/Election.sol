@@ -15,7 +15,7 @@ contract Election {
         bool hasVoted;
     }
 
-    int[] public questionaryCounters = [0,0,0,0,0,0,0,0,0,0,0];
+    int[] public questionaryCounters;
 
     // Store accounts that have voted
     mapping(address => bool) public voters;
@@ -52,6 +52,11 @@ contract Election {
         addVoter(address(bytes20(sha256("0x33Ae4DFFdf52743CdF80942Eb43e53A6f967D131"))));
         addVoter(address(bytes20(sha256("0x657bA408bfe1E6179808da37A0b0402692D8ce37"))));
         addVoter(address(bytes20(sha256("0x565fb45C2D252fa770F3ad7B41d5aeef2Fff702F"))));
+
+        // for (uint index = 0; index < questionaryCounters.length; index++) {
+        //     storeCount(index);
+        // }
+        questionaryCounters = [0,0,0,0,0,0,0,0,0,0,0];
 
     }
 
@@ -103,7 +108,7 @@ contract Election {
         addressLUT.push(addr);
     }
 
-    function storeCounts(int[] memory counters) public {
-        questionaryCounters = counters;
+    function storeCount(uint counter) public {
+        questionaryCounters[counter]++;
     }
 }

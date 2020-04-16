@@ -390,15 +390,27 @@ App = {
     if (currentQuestion.question == "Who did you choose?") {
       switch (userAnswer) {
         case 'a':
+          App.contracts.Election.deployed().then(function(instance) {
+            instance.storeCount(0);
+        });
           App.questionaryCounters[0]++;
           break;
         case 'b':
+          App.contracts.Election.deployed().then(function(instance) {
+            instance.storeCount(1);
+        });
           App.questionaryCounters[1]++;
           break;
         case 'c':
+          App.contracts.Election.deployed().then(function(instance) {
+            instance.storeCount(2);
+        });
           App.questionaryCounters[2]++;
           break;
         case 'd':
+          App.contracts.Election.deployed().then(function(instance) {
+            instance.storeCount(3);
+        });
           App.questionaryCounters[3]++;
           break;
       
@@ -410,12 +422,21 @@ App = {
     if (currentQuestion.question == "Are you a right wing or left wing?") {
       switch (userAnswer) {
         case 'a':
+          App.contracts.Election.deployed().then(function(instance) {
+            instance.storeCount(4);
+        });
           App.questionaryCounters[4]++;
           break;
         case 'b':
+          App.contracts.Election.deployed().then(function(instance) {
+            instance.storeCount(5);
+        });
           App.questionaryCounters[5]++;
           break;
         case 'c':
+          App.contracts.Election.deployed().then(function(instance) {
+            instance.storeCount(6);
+        });
           App.questionaryCounters[6]++;
           break;
       
@@ -427,15 +448,27 @@ App = {
     if (currentQuestion.question == "How do you feel about voting with DAPP election system?") {
       switch (userAnswer) {
         case 'a':
+          App.contracts.Election.deployed().then(function(instance) {
+            instance.storeCount(7);
+        });
           App.questionaryCounters[7]++;
           break;
         case 'b':
+          App.contracts.Election.deployed().then(function(instance) {
+            instance.storeCount(8);
+        });
           App.questionaryCounters[8]++;
           break;
         case 'c':
+          App.contracts.Election.deployed().then(function(instance) {
+            instance.storeCount(9);
+        });
           App.questionaryCounters[9]++;
           break;
         case 'd':
+          App.contracts.Election.deployed().then(function(instance) {
+            instance.storeCount(10);
+        });
           App.questionaryCounters[10]++;
           break;
       
@@ -446,12 +479,6 @@ App = {
     
 
   });
-
-  App.contracts.Election.deployed().then(function(instance) {
-    instance.storeCounts(App.questionaryCounters);
-  });
-  
-
 
   JSC.Chart('firstGraph', {
     type: 'horizontal column',
